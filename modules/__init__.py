@@ -1,0 +1,1 @@
+from modules.debug import main as debug
