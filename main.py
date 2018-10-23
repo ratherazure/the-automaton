@@ -22,9 +22,14 @@ class TheClient(discord.Client):
         print("--------------------------------")
 
     async def on_message(self, message):
-        if message.content.startswith("/") and commands.get(message.content.split(" ")[0][1:], [None, None])[0] != None: #if message starts with the command handle and is in the command dictionary then...
-            response = commands.get(message.content.split(" ")[0][1:], [None, None])
-            response = response[0](*response[1]) #execute the function with the parameters.
+        if message.content.startswith("/") and commands.get(message.content.split(" ")[0][1:], [None, None])[0] != [None, None]: #if message starts with the command handle and is in the command dictionary then...
+            command = commands.get(message.content.split(" ")[0][1:], [None, None]) #take the invoked command and return with a python pointer to a function
+            print(commands)
+            if command[1] == []: #for some reason, one line if statements don't work here?
+                parameters = message.content.split(" ")[1:] #if there are no predetermined parameters, take them from the message itself.
+            else:
+                parameters = command[1]
+            response = command[0](*parameters) #execute the function with the parameters.
             await message.channel.send(content = response.get("content", None), embed = response.get("embed", None), file = response.get("file", None)) #aaand off it goes!
 
 
@@ -35,7 +40,8 @@ if __name__ == "__main__":
 
     #the place where you map a command to the function, and also where you specify your parameters
     commands = {
-        "debug": (modules.debug, ["Hello", "World", "!"])
+        "debug": (modules.debug, ["Hello", "World", "!"]),
+        "story": (modules.story, [])
     }
 
     client = TheClient()
