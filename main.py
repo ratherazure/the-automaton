@@ -22,8 +22,8 @@ class TheClient(discord.Client):
         print("--------------------------------")
 
     async def on_message(self, message):
-        if message.content.startswith("/") and commands.get(message.content.split(" ")[0][1:], [None, None])[0] != [None, None]: #if message starts with the command handle and is in the command dictionary then...
-            command = commands.get(message.content.split(" ")[0][1:], [None, None]) #take the invoked command and return with a python pointer to a function
+        if message.content.startswith(commandInvoker) and commands.get(message.content.split(" ")[0][len(commandInvoker):], [None, None])[0] != [None, None]: #if message starts with the command handle and is in the command dictionary then...
+            command = commands.get(message.content.split(" ")[0][len(commandInvoker):], [None, None]) #take the invoked command and return with a python pointer to a function
             if command[1] == []: #for some reason, one line if statements don't work here?
                 parameters = message.content.split(" ")[1:] #if there are no predetermined parameters, take them from the message itself.
             else:
@@ -35,7 +35,7 @@ class TheClient(discord.Client):
 if __name__ == "__main__":
 
     colorama.init()
-    commandHandle = "/"
+    commandInvoker = "/"
 
     #the place where you map a command to the function, and also where you specify your parameters
     commands = {
