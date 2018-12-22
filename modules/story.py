@@ -80,7 +80,9 @@ def main(*args):
     Response = json.loads(Response)
 
     if "errors" in Response and "data" not in Response:
-        return {"content": "Error {status}: {message}".format(status = Response["errors"]["status"], message = Response["errors"]["title"].title())}
+        return {"content": "```\nError {status}: {message}\n```".format(status = Response["errors"]["status"], message = Response["errors"]["title"].title())}
+    elif "data" in Response and "errors" not in Response and "data" == []:
+        return {"content": "```\nError {status}: {message}\n```".format(status = "404", message = "Search Query is Valid; No Data Returned")}
     else:
         return {"embed": formatEmbed(Story(Response))}
 
