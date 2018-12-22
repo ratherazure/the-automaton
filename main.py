@@ -5,6 +5,9 @@ import asyncio
 import crayons
 import colorama
 import types
+import re
+import json
+import random
 
 import modules
 
@@ -22,6 +25,8 @@ class TheClient(discord.Client):
         print("--------------------------------")
 
     async def on_message(self, message):
+        response = None
+
         if message.content.startswith(commandInvoker) and commands.get(message.content.split(" ")[0][len(commandInvoker):], [None, None])[0] != [None, None]: #if message starts with the command handle and is in the command dictionary then...
             command = commands.get(message.content.split(" ")[0][len(commandInvoker):], [None, None]) #take the invoked command and return with a python pointer to a function
             if command[1] == []: #for some reason, one line if statements don't work here?
@@ -29,7 +34,15 @@ class TheClient(discord.Client):
             else:
                 parameters = command[1]
             response = command[0](*parameters) #execute the function with the parameters.
-            await message.channel.send(content = response.get("content", None), embed = response.get("embed", None), file = response.get("file", None)) #whatever it gets back, just send it. no validation.
+
+        if response == None: #if the a response has not yet been set then...
+            for entry in interceptResponses: #if any of the triggers exists in any part message, then...
+                if re.search(r"\b{}\b".format(entry), message.content) != None:
+                    payload = random.choice(interceptResponses[entry])
+                    response = {"content": payload, "file": None, "embed": None} #set the payload
+
+        if response != None: #don't send nothing
+            await message.channel.send(content = response.get("content", None), embed = response.get("embed", None), file = response.get("file", None))
 
 
 if __name__ == "__main__":
@@ -42,6 +55,8 @@ if __name__ == "__main__":
         "debug": (modules.debug, ["Hello", "World", "!"]),
         "story": (modules.story, [])
     }
+
+    interceptResponses = json.loads(open(os.path.join("data", "responses.json")).read())
 
     client = TheClient()
     client.run(open(os.path.join("data", "discordToken.txt")).read())
