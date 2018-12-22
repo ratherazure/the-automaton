@@ -79,7 +79,10 @@ def main(*args):
     Response = requests.get("https://www.fimfiction.net/api/v2/stories?query={}&include=characters,tags,author&sort=-relevance&page[size]=1".format(args), headers=headers).text
     Response = json.loads(Response)
 
-    return {"embed": formatEmbed(Story(Response))}
+    if "errors" in Response and "data" not in Response:
+        return {"content": "Error {status}: {message}".format(status = Response["errors"]["status"], message = Response["errors"]["title"].title())}
+    else:
+        return {"embed": formatEmbed(Story(Response))}
 
 if __name__ == "__main__":
     main()
