@@ -76,7 +76,7 @@ def main(*args):
     except FileNotFoundError:
         return {}
 
-    Response = requests.get("https://www.fimfiction.net/api/v2/stories?query={}&include=characters,tags,author&sort=-relevance&page[size]=1".format("+".join(args)), headers=headers).text
+    Response = requests.get("https://www.fimfiction.net/api/v2/stories?query={}&include=characters,tags,author&sort=-relevance&page[size]=1".format(args), headers=headers).text
     Response = json.loads(Response)
 
     return {"embed": formatEmbed(Story(Response))}
