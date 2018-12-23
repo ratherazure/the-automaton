@@ -74,13 +74,13 @@ def main(*args):
     try:
         headers = {"Authorization": "bearer {}".format(open(os.path.join("data", "fimfictionToken.txt")).read())}
     except FileNotFoundError:
-        return {}
+        headers = {}
 
     Response = requests.get("https://www.fimfiction.net/api/v2/stories?query={}&include=characters,tags,author&sort=-relevance&page[size]=1".format(args), headers=headers).text
     Response = json.loads(Response)
 
     if "errors" in Response and "data" not in Response:
-        return {"content": "```\nError {status}: {message}\n```".format(status = Response["errors"]["status"], message = Response["errors"]["title"].title())}
+        return {"content": "```\nError {status}: {message}\n```".format(status = Response["errors"][0]["status"], message = Response["errors"][0]["title"].title())}
     elif "data" in Response and "errors" not in Response and Response["data"] == []:
         return {"content": "```\nError {status}: {message}\n```".format(status = "404", message = "Search Query is Valid; No Data Returned")}
     else:
