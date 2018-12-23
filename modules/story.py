@@ -81,7 +81,7 @@ def main(*args):
 
     if "errors" in Response and "data" not in Response:
         return {"content": "```\nError {status}: {message}\n```".format(status = Response["errors"]["status"], message = Response["errors"]["title"].title())}
-    elif "data" in Response and "errors" not in Response and "data" == []:
+    elif "data" in Response and "errors" not in Response and Response["data"] == []:
         return {"content": "```\nError {status}: {message}\n```".format(status = "404", message = "Search Query is Valid; No Data Returned")}
     else:
         return {"embed": formatEmbed(Story(Response))}
