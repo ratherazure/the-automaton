@@ -42,7 +42,8 @@ class TheClient(discord.Client):
                     response = {"content": payload, "file": None, "embed": None} #set the payload
 
         if response != None: #don't send nothing
-            await message.channel.send(content = response.get("content", None), embed = response.get("embed", None), file = response.get("file", None))
+            async with message.channel.typing():
+                await message.channel.send(content = response.get("content", None), embed = response.get("embed", None), file = response.get("file", None))
 
 
 if __name__ == "__main__":
