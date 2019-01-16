@@ -71,6 +71,9 @@ def formatEmbed(story):
     return em
 
 def main(*args):
+    if len(args) == 0:
+        return {"content": "```\nError {status}: {message}\n```".format(status = "400", message = "Bad Request; No Arguments were Recieved")}
+    
     try:
         headers = {"Authorization": "bearer {}".format(open(os.path.join("data", "fimfictionToken.txt")).read())}
     except FileNotFoundError:
