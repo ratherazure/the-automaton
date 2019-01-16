@@ -1,0 +1,5 @@
+#discord.py rewrite is not on pip.
+crayons
+maya
+bs4
+requests
