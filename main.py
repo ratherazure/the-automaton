@@ -37,7 +37,7 @@ class TheClient(discord.Client):
 
         if response == None: #if the a response has not yet been set then...
             for entry in interceptResponses: #if any of the triggers exists in any part message, then...
-                if re.search(r"\b{}\b".format(entry), message.content) != None:
+                if re.search(r"\b{}\b".format(entry), message.content, re.IGNORECASE) != None:
                     payload = random.choice(interceptResponses[entry])
                     response = {"content": payload, "file": None, "embed": None} #set the payload
 
