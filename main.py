@@ -20,8 +20,11 @@ class TheClient(discord.Client):
         print("Currently logged in as: {}.".format(crayons.cyan(self.user.id)))
         print("Current owner is: {}.".format(crayons.cyan(application.owner)))
         print("{} currently has access to...".format(crayons.cyan(self.user.name)))
-        for server in self.guilds:
-            print("- {}".format(server))
+        if len(self.guilds) > 0:
+            for server in self.guilds:
+                print("- {}".format(server))
+        else:
+            print(crayons.red("There are no servers this bot is connected to."))
         print("--------------------------------")
 
     async def on_message(self, message):
