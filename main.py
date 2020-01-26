@@ -9,7 +9,7 @@ import re
 import json
 import random
 
-import modules
+from modules import *
 
 class TheClient(discord.Client):
     async def on_ready(self):
@@ -47,6 +47,8 @@ class TheClient(discord.Client):
         if response != None: #don't send nothing
             await message.channel.send(content = response.get("content", None), embed = response.get("embed", None), file = response.get("file", None))
 
+def checkifImported(moduleinQuestion): #checks if custom module is imported
+    return "modules.{module}".format(moduleinQuestion) in sys.modules.keys()
 
 if __name__ == "__main__":
 
@@ -55,11 +57,11 @@ if __name__ == "__main__":
 
     #the place where you map a command to the function, and also where you specify your parameters
     commands = {
-        "debug": (modules.debug, ["Hello", "World", "!"]),
-        "story": (modules.story, [])
+        "debug": (debug, ["Hello", "World", "!"]),
+        "story": (story, [])
     }
 
     interceptResponses = json.loads(open(os.path.join("data", "responses.json")).read())
 
-    client = TheClient()
-    client.run(open(os.path.join("data", "discordToken.txt")).read())
+    #client = TheClient()
+    #client.run(open(os.path.join("data", "discordToken.txt")).read())
